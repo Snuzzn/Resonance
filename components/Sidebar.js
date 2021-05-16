@@ -22,7 +22,9 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { RiBookmark3Fill } from "react-icons/ri";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useRouter } from "next/router";
+import firebase from "firebase/app";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -45,10 +47,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "1em",
   },
 
-  modeToggle: {
+  bottomIcon: {
     marginTop: "auto",
     justifyContent: "center",
-    marginBottom: "1em",
   },
   list: {
     height: "100vh",
@@ -61,20 +62,26 @@ const useStyles = makeStyles((theme) => ({
 export default function Sidebar({ darkMode, setDarkMode, topics }) {
   const classes = useStyles();
 
+  const router = useRouter();
+  const { name } = router.query;
+
   const openList = new Array(topics.length);
   for (var i = 0; i < openList.length; i++) {
     openList[i] = false;
   }
   const [open, setOpen] = React.useState(openList);
-  const [selected, setSelected] = React.useState();
+  const [selected, setSelected] = React.useState(name);
 
-  const router = useRouter();
   const handleClick = (index, mainItem) => {
     let newOpenList = open.slice();
     newOpenList[index] = !newOpenList[index];
     setOpen(newOpenList);
-    setSelected(mainItem.text);
-    router.push(`${mainItem.text}`);
+    navToTopic(mainItem.text);
+  };
+
+  const navToTopic = (topic) => {
+    setSelected(topic);
+    router.push(`/topic/${topic}`);
   };
 
   return (
@@ -97,7 +104,7 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
         {topics.map((mainItem, index) => (
           <div key={index}>
             <ListItem
-              selected={selected === index}
+              selected={selected === mainItem.text}
               button
               onClick={() => handleClick(index, mainItem)}
             >
@@ -117,7 +124,7 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
                         key={subItem}
                         button
                         className={classes.nested}
-                        onClick={() => setSelected(subItem)}
+                        onClick={() => navToTopic(subItem)}
                       >
                         <ListItemText primary={subItem} />
                       </ListItem>
@@ -128,7 +135,16 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
             )}
           </div>
         ))}
-        <ListItem className={classes.modeToggle}>
+
+        <ListItem className={classes.bottomIcon}>
+          <IconButton
+            onClick={async () => {
+              await firebase.auth().signOut();
+              router.push("/topic");
+            }}
+          >
+            <ExitToAppIcon style={{ fontSize: 30 }} />
+          </IconButton>
           <IconButton onClick={() => setDarkMode(!darkMode)}>
             {darkMode ? (
               <Brightness7Icon style={{ fontSize: 30 }} />

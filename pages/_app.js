@@ -3,12 +3,36 @@ import { ThemeProvider } from "@material-ui/core";
 import theme from "../styles/theme";
 import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { AuthProvider } from "../lib/auth";
+import { ToastProvider } from "react-toast-notifications";
 
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = React.useState(true);
   const theme = createMuiTheme({
+    overrides: {
+      MuiCssBaseline: {
+        "@global": {
+          "html::-webkit-scrollbar": {
+            width: "0.5rem",
+          },
+
+          "html::-webkit-scrollbar-thumb": {
+            background: darkMode ? "#1A2640" : "#C8CBCF",
+          },
+
+          "html::-webkit-scrollbar-track": {
+            background: darkMode ? "#2a3456" : "#f2f4f6",
+          },
+          html: {
+            scrollbarWidth: "thin",
+            scrollbarColor: darkMode ? "#1A2640 #2a3456" : "#C8CBCF #f2f4f6",
+          },
+        },
+      },
+    },
     breakpoints: {
       values: {
+        xs: 0,
         _xs: 0,
         _sm: 600,
         _md: 960,
@@ -35,7 +59,15 @@ function MyApp({ Component, pageProps }) {
   });
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} darkMode={darkMode} setDarkMode={setDarkMode} />
+      <ToastProvider>
+        <AuthProvider>
+          <Component
+            {...pageProps}
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+          />
+        </AuthProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

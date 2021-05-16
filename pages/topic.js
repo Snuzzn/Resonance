@@ -11,31 +11,39 @@ import nookies from "nookies";
 import { verifyIdToken } from "../lib/firebaseAdmin";
 import firebaseClient from "../lib/firebaseClient";
 import firebase from "firebase/app";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import SessionExpiredCheck from "../components/SessionExpiredCheck";
 
-export default function Home({ session, darkMode, setDarkMode }) {
+export default function Topic({ session, darkMode, setDarkMode }) {
   firebaseClient();
+  const { user } = useAuth();
+  const router = useRouter();
+
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
 
   const topics = [
-    { text: "Productivity", path: "/", subItems: [] },
-    { text: "Art", path: "/", subItems: ["Landscape", "Portraits"] },
-    { text: "Coding", path: "/", subItems: ["React", "Express"] },
+    { text: "Productivity", subItems: [] },
+    { text: "Art", subItems: ["Landscape", "Portraits"] },
+    { text: "Coding", subItems: ["React", "Express"] },
   ];
-  const { user } = useAuth();
   const media = ["All", "Videos", "Articles", "Podcasts"];
+
   return (
-    <>
+    <SessionExpiredCheck session={session}>
       <Head>
         <title>Resonance</title>
         <meta name="description" content="Bookmark manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Link href="/topic">Topic</Link>
       <CssBaseline />
-      <main></main>
-    </>
+      <main>
+        <Layout darkMode={darkMode} setDarkMode={setDarkMode} topics={topics}>
+          <div>User ID: {user ? user.uid : "no user signed in"}</div>
+          <div>{session}</div>
+        </Layout>
+      </main>
+    </SessionExpiredCheck>
   );
 }
 
@@ -48,6 +56,8 @@ export async function getServerSideProps(context) {
       props: { session: `Your email is ${email} and your UID is ${uid}.` },
     };
   } catch (err) {
-    return { props: { session: "none, son" } };
+    // context.res.writeHead(302, { Location: "/login" });
+    // context.res.end();
+    return { props: { session: false } };
   }
 }

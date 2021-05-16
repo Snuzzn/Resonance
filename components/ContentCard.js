@@ -9,12 +9,15 @@ import {
   CardActions,
   makeStyles,
   IconButton,
+  CardHeader,
 } from "@material-ui/core";
 import NotesIcon from "@material-ui/icons/Notes";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ContentDetails from "./ContentDetails";
+import Skeleton from "@material-ui/lab/Skeleton";
+import Image from "next/image";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +25,18 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     paddingTop: "56.25%",
+
+    backgroundImage:
+      theme.palette.type === "light"
+        ? "linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%)"
+        : //"linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%)",
+          "linear-gradient(60deg, #243949 0%, #517fa4 100%)",
+    //"linear-gradient(60deg, #1e3c72 0%, #1e3c72 1%, #2a5298 100%)",
+    // "linear-gradient(60deg, #29323c 0%, #485563 100%)",
+    // "linear-gradient(to right, #09203f 0%, #537895 100%)",
+    // "linear-gradient(to right, #868f96 0%, #596164 100%)",
+
+    // height: 190,
   },
   modal: {
     display: "flex",
@@ -29,11 +44,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 
-  image: {
-    borderRadius: "1em",
-    alignSelf: "center",
-    marginTop: "1em",
-  },
   modalHeading: {
     display: "flex",
     alignItems: "center",
@@ -44,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
   notesField: {
     marginTop: "1.5em",
   },
+  logo: {
+    borderRadius: "1em",
+  },
 }));
 
 export default function ContentCard({ img }) {
@@ -52,20 +65,67 @@ export default function ContentCard({ img }) {
   const [later, setLater] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [complete, setComplete] = React.useState(false);
-
+  const [loading, setLoading] = React.useState(false);
+  const [youtube, setYoutube] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
+  React.useEffect(() => {
+    if (img.includes("ytimg")) {
+      setYoutube(true);
+    }
+  }, []);
+
+  // const link = "https://docs.react2025.com/dashboard/swr";
+  // const apiLink = `image.thum.io/get/width/600/crop/800/${link}`;
+  // const getImage = async () => {
+  //   const response = await fetch(
+  //     "https://docs.react2025.com/feedback/firebase-admin"
+  //   );
+  //   if (response.ok) {
+  //     console.log(response);
+  //     // setImage(response);
+  //     // console.log(image);
+  //     setLoading(false);
+  //   }
+  // };
+  // React.useEffect(() => {
+  //   getImage();
+  // }, []);
 
   return (
     <>
       <Card className={classes.root}>
         <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image={img}
-            title="Contemplative Reptile"
-          />
+          {youtube ? (
+            <CardMedia
+              image={img}
+              className={classes.media}
+              title="Contemplative Reptile"
+            />
+          ) : (
+            <CardMedia className={classes.media} title="Contemplative Reptile">
+              <div
+                style={{
+                  position: "absolute",
+                  // left: "65%",
+                  // top: "50%"
+                  left: "40%",
+                  top: "20%",
+                }}
+              >
+                <Image
+                  className={classes.logo}
+                  quality="100"
+                  width={65}
+                  height={65}
+                  quality={100}
+                  src={img}
+                />
+              </div>
+            </CardMedia>
+          )}
+
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Lizard
@@ -108,6 +168,7 @@ export default function ContentCard({ img }) {
           </IconButton>
         </CardActions>
       </Card>
+
       <ContentDetails setOpen={setOpen} open={open} img={img} />
     </>
   );

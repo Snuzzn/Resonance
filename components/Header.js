@@ -7,6 +7,7 @@ import AddIcon from "@material-ui/icons/Add";
 import TocIcon from "@material-ui/icons/Toc";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AddContentDialog from "./AddContentDialog";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -32,10 +33,11 @@ export default function Header({ grid, setGrid, currMedium, topics }) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  const router = useRouter();
+  const { name } = router.query;
   return (
     <div className={classes.titleContainer}>
-      <Typography variant="h4">Landscape Art</Typography>
+      <Typography variant="h4">{name}</Typography>
       <StatusButton />
       <IconButton size="small" onClick={() => setGrid(!grid)}>
         {grid ? <TocIcon /> : <DashboardIcon />}
