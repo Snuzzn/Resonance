@@ -13,14 +13,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import firebaseClient from "../lib/firebaseClient";
-import firebase from "firebase/app";
-import "firebase/auth";
 import { useToasts } from "react-toast-notifications";
 import { useRouter } from "next/router";
 import Divider from "@material-ui/core/Divider";
 import { FcGoogle } from "react-icons/fc";
-import { useAuth } from "../lib/auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,13 +45,9 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const router = useRouter();
   const { addToast } = useToasts();
-  firebaseClient();
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
-  // console.log(pass);
-  const { auth } = useAuth();
-  console.log(auth);
   return (
     <Container maxWidth="xs">
       <CssBaseline />
@@ -109,12 +101,6 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={async () => {
-              await auth.signInWithEmail(email, pass).catch(function (error) {
-                const message = error.message;
-                addToast(message, { appearance: "error" });
-              });
-            }}
           >
             Sign In
           </Button>
@@ -123,18 +109,6 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={async () => {
-              await firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, pass)
-                .then(function (firebaseUser) {
-                  router.push("/topic");
-                })
-                .catch(function (error) {
-                  const message = error.message;
-                  addToast(message, { appearance: "error" });
-                });
-            }}
           >
             Sign Up
           </Button>

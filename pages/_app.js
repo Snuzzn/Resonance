@@ -3,7 +3,6 @@ import { ThemeProvider } from "@material-ui/core";
 import theme from "../styles/theme";
 import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { AuthProvider } from "../lib/auth";
 import { ToastProvider } from "react-toast-notifications";
 
 function MyApp({ Component, pageProps }) {
@@ -60,13 +59,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
       <ToastProvider>
-        <AuthProvider>
-          <Component
-            {...pageProps}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          />
-        </AuthProvider>
+        <Component
+          {...pageProps}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
       </ToastProvider>
     </ThemeProvider>
   );
