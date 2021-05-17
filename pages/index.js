@@ -6,10 +6,13 @@ import ContentView from "../components/ContentView";
 import Header from "../components/Header";
 import MediaTypes from "../components/MediaTypes";
 import Link from "next/link";
-export default function Home({ session, darkMode, setDarkMode }) {
+import { signIn, signOut, useSession } from "next-auth/client";
+
+export default function Home({ darkMode, setDarkMode }) {
+  const [session, loading] = useSession();
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
-
+  console.log(session);
   const topics = [
     { text: "Productivity", path: "/", subItems: [] },
     { text: "Art", path: "/", subItems: ["Landscape", "Portraits"] },
@@ -25,7 +28,20 @@ export default function Home({ session, darkMode, setDarkMode }) {
       </Head>
       <Link href="/topic">Topic</Link>
       <CssBaseline />
-      <main></main>
+      <main>
+        {!session && (
+          <>
+            Not signed in <br />
+            <button onClick={() => signIn()}>Sign in</button>
+          </>
+        )}
+        {session && (
+          <>
+            Signed in as {session.user.name} <br />
+            <button onClick={() => signOut()}>Sign out</button>
+          </>
+        )}
+      </main>
     </>
   );
 }
