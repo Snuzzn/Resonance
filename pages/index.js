@@ -6,19 +6,34 @@ import ContentView from "../components/ContentView";
 import Header from "../components/Header";
 import MediaTypes from "../components/MediaTypes";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/client";
+import useSWR from "swr";
+import fetcher from "../util/fetcher";
+
+function useHello(id) {
+  const { data, error } = useSWR(`/api/hello`, fetcher);
+
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
 
 export default function Home({ darkMode, setDarkMode }) {
-  const [session, loading] = useSession();
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
-  console.log(session);
   const topics = [
     { text: "Productivity", path: "/", subItems: [] },
     { text: "Art", path: "/", subItems: ["Landscape", "Portraits"] },
     { text: "Coding", path: "/", subItems: ["React", "Express"] },
   ];
   const media = ["All", "Videos", "Articles", "Podcasts"];
+
+  const { data, isLoading, isError } = useHello();
+
+  // if (isLoading) return <>Loading</>;
+  // if (isError) return <>Error</>;
+  // return <> {data.message} </>;
   return (
     <>
       <Head>
@@ -28,19 +43,11 @@ export default function Home({ darkMode, setDarkMode }) {
       </Head>
       <Link href="/topic">Topic</Link>
       <CssBaseline />
+
       <main>
-        {!session && (
-          <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
-          </>
-        )}
-        {session && (
-          <>
-            Signed in as {session.user.name} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-          </>
-        )}
+        <Layout darkMode={darkMode} setDarkMode={setDarkMode} topics={topics}>
+          {data ? data.message : "???"}
+        </Layout>
       </main>
     </>
   );

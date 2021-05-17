@@ -24,7 +24,8 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { RiBookmark3Fill } from "react-icons/ri";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useRouter } from "next/router";
-import firebase from "firebase/app";
+import Axios from "axios";
+import { useToasts } from "react-toast-notifications";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +63,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Sidebar({ darkMode, setDarkMode, topics }) {
   const classes = useStyles();
 
+  const { addToast } = useToasts();
+
   const router = useRouter();
   const { name } = router.query;
 
@@ -82,6 +85,20 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
   const navToTopic = (topic) => {
     setSelected(topic);
     router.push(`/topic/${topic}`);
+  };
+
+  const handleLogout = () => {
+    Axios.get("http://localhost:3000/api/logout")
+      .then((response) => {
+        // console.log(response);
+        addToast(response.data.message, { appearance: "success" });
+        router.push("/login");
+        // addToast(err.response.data.message, { appearance: "error" });
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        // addToast(err.response.data.message, { appearance: "error" });
+      });
   };
 
   return (
@@ -137,12 +154,7 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
         ))}
 
         <ListItem className={classes.bottomIcon}>
-          <IconButton
-            onClick={async () => {
-              await firebase.auth().signOut();
-              router.push("/topic");
-            }}
-          >
+          <IconButton onClick={handleLogout}>
             <ExitToAppIcon style={{ fontSize: 30 }} />
           </IconButton>
           <IconButton onClick={() => setDarkMode(!darkMode)}>

@@ -17,6 +17,9 @@ import { useToasts } from "react-toast-notifications";
 import { useRouter } from "next/router";
 import Divider from "@material-ui/core/Divider";
 import { FcGoogle } from "react-icons/fc";
+import useSWR from "swr";
+import fetcher from "../util/fetcher";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,11 +46,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
-  const router = useRouter();
   const { addToast } = useToasts();
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
+  const [name, setName] = React.useState("");
+  const router = useRouter();
+
+  const handleRegister = () => {
+    Axios.post("http://localhost:3000/api/register", {
+      name: name,
+      email: email,
+      password: pass,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        addToast(err.response.data.message, { appearance: "error" });
+      });
+  };
+  const handleLogin = async () => {
+    await Axios.post("http://localhost:3000/api/login", {
+      email: email,
+      password: pass,
+    })
+      .then((response) => {
+        addToast(response.data.message, { appearance: "success" });
+        router.push("/");
+      })
+      .catch((err) => {
+        addToast(err.response.data.message, { appearance: "error" });
+        // console.log(err.response);
+      });
+  };
+
+  const errorToast = (err) => {
+    addToast(err.response.data.message, { appearance: "error" });
+  };
+  // const { data } = useSWR("/api/login", fetcher);
+
   return (
     <Container maxWidth="xs">
       <CssBaseline />
@@ -59,6 +98,18 @@ export default function SignIn() {
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="name"
+            label="Name"
+            type="string"
+            id="string"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -85,6 +136,7 @@ export default function SignIn() {
             value={pass}
             onChange={(e) => setPass(e.target.value)}
           />
+
           <div className={classes.utils}>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -101,6 +153,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleLogin}
           >
             Sign In
           </Button>
@@ -109,6 +162,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleRegister}
           >
             Sign Up
           </Button>

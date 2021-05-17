@@ -4,7 +4,6 @@ import theme from "../styles/theme";
 import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ToastProvider } from "react-toast-notifications";
-import { Provider } from "next-auth/client";
 
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = React.useState(true);
@@ -59,14 +58,12 @@ function MyApp({ Component, pageProps }) {
   });
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <Provider session={pageProps.session}>
-          <Component
-            {...pageProps}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          />
-        </Provider>
+      <ToastProvider autoDismiss={true} autoDismissTimeout={3000}>
+        <Component
+          {...pageProps}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
       </ToastProvider>
     </ThemeProvider>
   );
