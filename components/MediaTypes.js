@@ -20,7 +20,7 @@ const mediaIcons = {
 
 const useStyles = makeStyles((theme) => ({
   mediaContainer: {
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
     "& > *": {
       margin: theme.spacing(0.5),
       padding: theme.spacing(2),

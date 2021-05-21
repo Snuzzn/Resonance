@@ -3,7 +3,6 @@ import { hash } from "bcrypt";
 
 export default async (req, res) => {
   const { db } = await connectToDatabase();
-  console.log(process.env.JWT_SECRET);
   if (req.method !== "POST") {
     res.status(405).json({ message: "Must be POST" });
   } else {

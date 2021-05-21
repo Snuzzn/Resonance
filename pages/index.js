@@ -19,7 +19,7 @@ function useHello(id) {
   };
 }
 
-export default function Home({ darkMode, setDarkMode }) {
+export default function Home() {
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
   const topics = [
@@ -45,9 +45,7 @@ export default function Home({ darkMode, setDarkMode }) {
       <CssBaseline />
 
       <main>
-        <Layout darkMode={darkMode} setDarkMode={setDarkMode} topics={topics}>
-          {data ? data.message : "???"}
-        </Layout>
+        <Layout topics={topics}>{data ? data.message : "???"}</Layout>
       </main>
     </>
   );

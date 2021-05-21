@@ -4,9 +4,25 @@ import theme from "../styles/theme";
 import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ToastProvider } from "react-toast-notifications";
+import { MyProvider, MyContext } from "../components/context";
 
 function MyApp({ Component, pageProps }) {
-  const [darkMode, setDarkMode] = React.useState(true);
+  return (
+    <MyProvider>
+      <Themer>
+        <ToastProvider autoDismiss={true} autoDismissTimeout={3000}>
+          <Component {...pageProps} />
+        </ToastProvider>
+      </Themer>
+    </MyProvider>
+  );
+}
+
+export default MyApp;
+
+const Themer = ({ children }) => {
+  const { darkMode } = React.useContext(MyContext);
+
   const theme = createMuiTheme({
     overrides: {
       MuiCssBaseline: {
@@ -56,17 +72,5 @@ function MyApp({ Component, pageProps }) {
       sidebar: darkMode ? "#2A3456" : "#F2F4F6",
     },
   });
-  return (
-    <ThemeProvider theme={theme}>
-      <ToastProvider autoDismiss={true} autoDismissTimeout={3000}>
-        <Component
-          {...pageProps}
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-        />
-      </ToastProvider>
-    </ThemeProvider>
-  );
-}
-
-export default MyApp;
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+};

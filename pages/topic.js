@@ -8,7 +8,7 @@ import MediaTypes from "../components/MediaTypes";
 
 import { useRouter } from "next/router";
 
-export default function Topic({ session, darkMode, setDarkMode }) {
+export default function Topic() {
   const router = useRouter();
 
   const [grid, setGrid] = React.useState(true);
@@ -30,11 +30,7 @@ export default function Topic({ session, darkMode, setDarkMode }) {
       </Head>
       <CssBaseline />
       <main>
-        <Layout
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-          topics={topics}
-        ></Layout>
+        <Layout topics={topics}></Layout>
       </main>
     </>
   );

@@ -18,13 +18,18 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ContentDetails from "./ContentDetails";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Image from "next/image";
+import { MyContext } from "./context";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-  },
+const useStyles = makeStyles((theme, cardSize) => ({
+  root: (props) => ({
+    width: props.cardSize,
+  }),
+  // [theme.breakpoints.only("_lg")]: {
+  //   width: 400,
+  // },
   media: {
     paddingTop: "56.25%",
+    position: "relative",
 
     backgroundImage:
       theme.palette.type === "light"
@@ -35,8 +40,15 @@ const useStyles = makeStyles((theme) => ({
     // "linear-gradient(60deg, #29323c 0%, #485563 100%)",
     // "linear-gradient(to right, #09203f 0%, #537895 100%)",
     // "linear-gradient(to right, #868f96 0%, #596164 100%)",
-
-    // height: 190,
+  },
+  logo: {
+    position: "absolute",
+    // left: "65%",
+    // top: "50%",
+    // left: "50%",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
   modal: {
     display: "flex",
@@ -54,88 +66,73 @@ const useStyles = makeStyles((theme) => ({
   notesField: {
     marginTop: "1.5em",
   },
-  logo: {
+  img: {
     borderRadius: "1em",
+  },
+  title: {
+    height: "5em",
+    overflow: "hidden",
   },
 }));
 
-export default function ContentCard({ img }) {
-  const classes = useStyles();
+export default function ContentCard({ data }) {
   const [favourite, setFavourite] = React.useState(false);
   const [later, setLater] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [complete, setComplete] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [youtube, setYoutube] = React.useState(false);
+  const { cardSize } = React.useContext(MyContext);
+  const props = { cardSize: cardSize };
+  const classes = useStyles(props);
+
   const handleOpen = () => {
     setOpen(true);
   };
   React.useEffect(() => {
-    if (img.includes("ytimg")) {
+    if (data.img.includes("ytimg")) {
       setYoutube(true);
     }
   }, []);
 
-  // const link = "https://docs.react2025.com/dashboard/swr";
-  // const apiLink = `image.thum.io/get/width/600/crop/800/${link}`;
-  // const getImage = async () => {
-  //   const response = await fetch(
-  //     "https://docs.react2025.com/feedback/firebase-admin"
-  //   );
-  //   if (response.ok) {
-  //     console.log(response);
-  //     // setImage(response);
-  //     // console.log(image);
-  //     setLoading(false);
-  //   }
-  // };
-  // React.useEffect(() => {
-  //   getImage();
-  // }, []);
-
   return (
     <>
       <Card className={classes.root}>
-        <CardActionArea>
-          {youtube ? (
-            <CardMedia
-              image={img}
-              className={classes.media}
-              title="Contemplative Reptile"
-            />
-          ) : (
-            <CardMedia className={classes.media} title="Contemplative Reptile">
-              <div
-                style={{
-                  position: "absolute",
-                  // left: "65%",
-                  // top: "50%"
-                  left: "40%",
-                  top: "20%",
-                }}
+        <a href={data.link} target="_blank" rel="noopener noreferrer">
+          <CardActionArea>
+            {youtube ? (
+              <CardMedia
+                image={data.img}
+                className={classes.media}
+                title={data.title}
+              />
+            ) : (
+              <CardMedia
+                className={classes.media}
+                title="Contemplative Reptile"
               >
-                <Image
-                  className={classes.logo}
-                  quality="100"
-                  width={65}
-                  height={65}
-                  quality={100}
-                  src={img}
-                />
-              </div>
-            </CardMedia>
-          )}
+                <div className={classes.logo}>
+                  <Image
+                    quality="100"
+                    width={65}
+                    height={65}
+                    quality={100}
+                    src={data.img}
+                    className={classes.img}
+                  />
+                </div>
+              </CardMedia>
+            )}
+          </CardActionArea>
+        </a>
 
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Lizard
+        <CardContent>
+          <div className={classes.title}>
+            <Typography gutterBottom variant="h5">
+              {data.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-        </CardActionArea>
+          </div>
+        </CardContent>
         <CardActions>
           <IconButton
             size="small"
@@ -169,7 +166,7 @@ export default function ContentCard({ img }) {
         </CardActions>
       </Card>
 
-      <ContentDetails setOpen={setOpen} open={open} img={img} />
+      <ContentDetails setOpen={setOpen} open={open} img={data.img} />
     </>
   );
 }

@@ -8,19 +8,20 @@ export default async (req, res) => {
 
   if (req.method !== "POST") {
     res.status(405).json({ message: "Must be POST" });
-    a;
   } else {
     // find user
     const user = await db
       .collection("users")
       .findOne({ email: req.body.email });
+    // const uid = user._id;
+    // console.log(uid);
     if (!user) {
       res.status(400).json({ message: "Account not found." });
     } else {
       // check if hashed password matches the one in db
       compare(req.body.password, user.password, function (err, result) {
         if (!err && result) {
-          const claims = { email: req.body.email };
+          const claims = { email: req.body.email, uid: user._id };
           const jwt = sign(claims, process.env.JWT_SECRET, { expiresIn: "1h" });
           res.setHeader(
             "Set-Cookie",
@@ -33,9 +34,11 @@ export default async (req, res) => {
             })
           );
 
-          res.status(200).json({ message: "Welcome!" });
+          res.status(200).json({ message: "Welcome! Logging you in..." });
         } else {
-          res.status(400).json({ message: "Password was incorrect" });
+          res.status(400).json({
+            message: "Your password was incorrect. Please try again.",
+          });
         }
       });
     }

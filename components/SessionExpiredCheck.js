@@ -27,41 +27,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SessionExpiredCheck({ session, children }) {
+export default function SessionExpiredCheck() {
   const classes = useStyles();
-  const router = useRouter();
-  if (!session && typeof window !== "undefined") {
-    router.push("/login");
-  }
-  if (session) {
-    return <>{children}</>;
-  } else {
-    return (
-      <>
-        <CssBaseline />
-        <Modal
-          className={classes.modal}
-          open
-          disableAutoFocus
-          disableEnforceFocus
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 200,
-          }}
-        >
-          <Fade in>
-            <div className={classes.paper}>
-              <h2>Your session has expired.</h2>
+  // if (!session && typeof window !== "undefined") {
+  //   router.push("/login");
+  // }
 
-              <div className={classes.redirect}>
-                <p>Redirecting to login...</p>
-                <CircularProgress size={20} />
-              </div>
-            </div>
-          </Fade>
-        </Modal>
-      </>
-    );
-  }
+  return (
+    <Modal
+      className={classes.modal}
+      open
+      disableAutoFocus
+      disableEnforceFocus
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 200,
+      }}
+    >
+      <Fade in>
+        <div className={classes.paper}>
+          <h2>Logging you out</h2>
+
+          <div className={classes.redirect}>
+            <p>Redirecting to login...</p>
+            <CircularProgress size={20} />
+          </div>
+        </div>
+      </Fade>
+    </Modal>
+  );
 }

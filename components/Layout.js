@@ -11,11 +11,11 @@ const useStyles = makeStyles((theme) => ({
   },
   root: { display: "flex" },
 }));
-export default function Layout({ children, darkMode, setDarkMode, topics }) {
+export default function Layout({ children, topics }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Sidebar darkMode={darkMode} setDarkMode={setDarkMode} topics={topics} />
+      <Sidebar topics={topics} />
       <div className={classes.page}>{children}</div>
     </div>
   );

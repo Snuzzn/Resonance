@@ -5,9 +5,11 @@ import Layout from "../../components/Layout";
 import ContentView from "../../components/ContentView";
 import Header from "../../components/Header";
 import MediaTypes from "../../components/MediaTypes";
-import { useRouter } from "next/router";
+import { makeStyles } from "@material-ui/core";
 
-export default function Topic({ session, darkMode, setDarkMode }) {
+const useStyles = makeStyles((theme) => ({}));
+
+export default function Topic() {
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
 
@@ -18,6 +20,8 @@ export default function Topic({ session, darkMode, setDarkMode }) {
   ];
 
   const media = ["All", "Videos", "Articles", "Podcasts"];
+  const classes = useStyles();
+
   return (
     <>
       <Head>
@@ -27,7 +31,7 @@ export default function Topic({ session, darkMode, setDarkMode }) {
       </Head>
       <CssBaseline />
       <main>
-        <Layout darkMode={darkMode} setDarkMode={setDarkMode} topics={topics}>
+        <Layout topics={topics}>
           <Header
             grid={grid}
             setGrid={setGrid}
@@ -39,7 +43,7 @@ export default function Topic({ session, darkMode, setDarkMode }) {
             setCurrMedium={setCurrMedium}
             media={media}
           />
-          <ContentView grid={grid} />
+          <ContentView grid={grid} className={classes.content} />
         </Layout>
       </main>
     </>

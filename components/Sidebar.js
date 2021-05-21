@@ -26,6 +26,29 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useRouter } from "next/router";
 import Axios from "axios";
 import { useToasts } from "react-toast-notifications";
+import SessionExpiredCheck from "./SessionExpiredCheck";
+import Link from "next/link";
+import { MyContext } from "./context";
+
+const menu = [
+  {
+    title: "Art",
+    children: [
+      { title: "Landscape art" },
+      { title: "Portrait", children: [{ title: "face" }, { title: "body" }] },
+    ],
+  },
+  {
+    title: "Coding",
+    children: [
+      { title: "Frontend", children: [{ title: "React" }] },
+      {
+        title: "Backend",
+        children: [{ title: "Django" }, { title: "Express" }],
+      },
+    ],
+  },
+];
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     display: "flex",
     justifyContent: "center",
-    marginBottom: "1em",
+    margin: "1em 0 1em",
   },
 
   bottomIcon: {
@@ -53,26 +76,28 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   list: {
-    height: "100vh",
     display: "flex",
     flexDirection: "column",
     // color: "white",
   },
 }));
 
-export default function Sidebar({ darkMode, setDarkMode, topics }) {
+export default function Sidebar({ topics }) {
   const classes = useStyles();
+  const { darkMode, setDarkMode } = React.useContext(MyContext);
 
   const { addToast } = useToasts();
 
   const router = useRouter();
   const { name } = router.query;
-
-  const openList = new Array(topics.length);
-  for (var i = 0; i < openList.length; i++) {
-    openList[i] = false;
-  }
-  const [open, setOpen] = React.useState(openList);
+  const [open, setOpen] = React.useState(true);
+  const [displayChildren, setDisplayChildren] = React.useState({});
+  const [logout, setLogout] = React.useState(false);
+  // const openList = new Array(topics.length);
+  // for (var i = 0; i < openList.length; i++) {
+  //   openList[i] = false;
+  // }
+  // const [open, setOpen] = React.useState(openList);
   const [selected, setSelected] = React.useState(name);
 
   const handleClick = (index, mainItem) => {
@@ -86,6 +111,35 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
     setSelected(topic);
     router.push(`/topic/${topic}`);
   };
+  function Menu({ items }) {
+    return (
+      <ul>
+        {items.map((item) => (
+          <li>
+            <Link href={"/topic/" + item.title}>
+              <ListItemText primary={item.title} />
+            </Link>
+            {item.children && (
+              <button
+                onClick={() => {
+                  setDisplayChildren({
+                    ...displayChildren,
+                    [item.title]: !displayChildren[item.title],
+                  });
+                  setOpen(false);
+                }}
+              >
+                {displayChildren[item.title] ? "-" : "+"}
+              </button>
+            )}
+            {displayChildren[item.title] && item.children && (
+              <Menu items={item.children} />
+            )}
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
   const handleLogout = () => {
     Axios.get("http://localhost:3000/api/logout")
@@ -99,6 +153,7 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
         console.log(err.response.data.message);
         // addToast(err.response.data.message, { appearance: "error" });
       });
+    setLogout(true);
   };
 
   return (
@@ -109,7 +164,16 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
       anchor="left"
       classes={{ paper: classes.drawerPaper }}
     >
-      <List className={classes.list}>
+      <div alignItems="center" className={classes.title}>
+        <RiBookmark3Fill
+          color="#6267dc"
+          size="2em"
+          style={{ marginRight: "0.5em" }}
+        />
+        <Typography variant="h6">Resonance</Typography>
+      </div>
+      <Menu items={menu} />
+      {/* <List className={classes.list}>
         <ListItem alignItems="center" className={classes.title}>
           <RiBookmark3Fill
             color="#6267dc"
@@ -153,19 +217,21 @@ export default function Sidebar({ darkMode, setDarkMode, topics }) {
           </div>
         ))}
 
-        <ListItem className={classes.bottomIcon}>
-          <IconButton onClick={handleLogout}>
-            <ExitToAppIcon style={{ fontSize: 30 }} />
-          </IconButton>
-          <IconButton onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? (
-              <Brightness7Icon style={{ fontSize: 30 }} />
-            ) : (
-              <Brightness2Icon style={{ fontSize: 30 }} />
-            )}
-          </IconButton>
-        </ListItem>
-      </List>
+
+      </List> */}
+      <ListItem className={classes.bottomIcon}>
+        <IconButton onClick={handleLogout}>
+          <ExitToAppIcon style={{ fontSize: 30 }} />
+        </IconButton>
+        <IconButton onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? (
+            <Brightness7Icon style={{ fontSize: 30 }} />
+          ) : (
+            <Brightness2Icon style={{ fontSize: 30 }} />
+          )}
+        </IconButton>
+      </ListItem>
+      {logout && <SessionExpiredCheck />}
     </Drawer>
   );
 }
