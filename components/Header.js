@@ -60,13 +60,13 @@ export default function Header({ grid, setGrid, currMedium, topics }) {
     <div className={classes.titleContainer}>
       <Typography variant="h4">{name}</Typography>
       <FilterOptions />
-      <IconButton
+      {/* <IconButton
         size="small"
         onClick={() => setGrid(!grid)}
         className={classes.icon}
       >
         {grid ? <TocIcon /> : <DashboardIcon />}
-      </IconButton>
+      </IconButton> */}
       <SimplePopover />
 
       <Fab

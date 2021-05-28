@@ -8,14 +8,6 @@ import { UndrawFileSearching } from "react-undraw-illustrations";
 import { RiBookmark3Fill } from "react-icons/ri";
 import { useRouter } from "next/router";
 
-function useHello(id) {
-  const { data, error } = useSWR(`/api/hello`, fetcher);
-  return {
-    data: data,
-    // isLoading: !error && !data,
-    // isError: error,
-  };
-}
 const useStyles = makeStyles((theme) => ({
   centre: {
     height: "100vh",
@@ -49,13 +41,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home() {
-  const { data } = useHello();
   const classes = useStyles();
   const router = useRouter();
-
-  if (data) {
-    data.message === "Logged in" && router.push("/start");
-  }
 
   // if (isLoading) return <>Loading</>;
   // if (isError) return <>Error</>;

@@ -17,6 +17,7 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  CircularProgress,
 } from "@material-ui/core";
 import fetcher from "../util/fetcher";
 import { MyContext } from "./context";
@@ -59,6 +60,7 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
   const router = useRouter();
   const classes = useStyles();
   const [topic, setTopic] = React.useState(router.query.name);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     setTopic(router.query.name);
@@ -84,6 +86,7 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
   }, [type]);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     await Axios.post(`${baseUrl}/api/add-content`, {
       topic: topic,
@@ -101,6 +104,7 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
       `/api/content?topic=${router.query.name}&type=${type}&filter=${filter}`
     );
     mutate(`/api/get-types?topic=${router.query.name}`);
+    setLoading(false);
   };
 
   return (
@@ -156,7 +160,7 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
               Cancel
             </Button>
             <Button type="submit" color="primary">
-              Add
+              {loading ? <CircularProgress size={20} /> : "Add"}
             </Button>
           </DialogActions>
         </form>

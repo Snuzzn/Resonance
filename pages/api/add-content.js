@@ -66,7 +66,7 @@ const getTitle = async (link) => {
   let title = $("title").text();
   // console.log(title);
   // title = title.replace(/^(.+)–\s.+$/, "$1");
-  title = title.replace(/^- Youtube$/, "");
+  title = title.replace(/- YouTube$/, "");
   console.log(title);
   return title;
 };

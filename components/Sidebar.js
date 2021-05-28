@@ -130,6 +130,22 @@ export default function Sidebar() {
     setSelected(topic);
     router.push(`/topic/${topic}`);
   };
+
+  const handleLogout = () => {
+    Axios.get(`${baseUrl}/api/logout`)
+      .then((response) => {
+        // console.log(response);
+        addToast(response.data.message, { appearance: "success" });
+        router.push("/");
+        // addToast(err.response.data.message, { appearance: "error" });
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        // addToast(err.response.data.message, { appearance: "error" });
+      });
+    setLogout(true);
+  };
+
   function Menu({ items }) {
     return (
       <ul>
@@ -162,20 +178,6 @@ export default function Sidebar() {
       </ul>
     );
   }
-  const handleLogout = () => {
-    Axios.get(`${baseUrl}/api/logout`)
-      .then((response) => {
-        // console.log(response);
-        addToast(response.data.message, { appearance: "success" });
-        router.push("/");
-        // addToast(err.response.data.message, { appearance: "error" });
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        // addToast(err.response.data.message, { appearance: "error" });
-      });
-    setLogout(true);
-  };
 
   return (
     <Drawer

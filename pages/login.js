@@ -22,6 +22,12 @@ import fetcher from "../util/fetcher";
 import Axios from "axios";
 import baseUrl from "../util/baseUrl";
 
+function useHello(id) {
+  const { data, error } = useSWR(`/api/hello`, fetcher);
+  return {
+    data: data,
+  };
+}
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -53,7 +59,11 @@ export default function SignIn() {
   const [pass, setPass] = React.useState("");
   const [name, setName] = React.useState("");
   const router = useRouter();
+  const { data } = useHello();
 
+  if (data) {
+    data.message === "Logged in" && router.push("/start");
+  }
   const handleLogin = async () => {
     await Axios.post(`${baseUrl}/api/login`, {
       email: email,

@@ -29,7 +29,7 @@ export default function Home() {
   const media = ["All", "Videos", "Articles", "Podcasts"];
 
   const { data, isLoading, isError } = useHello();
-  console.log(data);
+  // console.log(data);
 
   // if (isLoading) return <>Loading</>;
   // if (isError) return <>Error</>;
