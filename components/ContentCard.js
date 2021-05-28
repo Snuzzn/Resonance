@@ -19,6 +19,10 @@ import ContentDetails from "./ContentDetails";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Image from "next/image";
 import { MyContext } from "./context";
+import Axios from "axios";
+import { useToasts } from "react-toast-notifications";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
 
 const useStyles = makeStyles((theme, cardSize) => ({
   root: (props) => ({
@@ -70,22 +74,22 @@ const useStyles = makeStyles((theme, cardSize) => ({
     borderRadius: "1em",
   },
   title: {
-    height: "5em",
+    height: "4.5em",
     overflow: "hidden",
   },
 }));
 
 export default function ContentCard({ data }) {
-  const [favourite, setFavourite] = React.useState(false);
+  const [favourite, setFavourite] = React.useState(data.fave);
   const [later, setLater] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [complete, setComplete] = React.useState(false);
+  const [complete, setComplete] = React.useState(data.consumed);
   const [loading, setLoading] = React.useState(false);
   const [youtube, setYoutube] = React.useState(false);
   const { cardSize } = React.useContext(MyContext);
   const props = { cardSize: cardSize };
   const classes = useStyles(props);
-
+  const { addToast } = useToasts();
   const handleOpen = () => {
     setOpen(true);
   };
@@ -94,6 +98,39 @@ export default function ContentCard({ data }) {
       setYoutube(true);
     }
   }, []);
+  // console.log(data);
+
+  const router = useRouter();
+  const topic = router.query.name;
+  const { type, filter } = React.useContext(MyContext);
+
+  const handleFavourite = async () => {
+    setFavourite(!favourite);
+
+    await Axios.post("http://localhost:3000/api/favourite", {
+      _id: data._id,
+    }).catch((err) => {
+      // console.log(err);
+      addToast(err.response.data.message, { appearance: "error" });
+    });
+    mutate(`/api/content?topic=${topic}&type=${type}&filter=${filter}`);
+  };
+
+  const handleComplete = async () => {
+    setComplete(!complete);
+    await Axios.post("http://localhost:3000/api/consume", {
+      _id: data._id,
+    }).catch((err) => {
+      // console.log(err);
+      addToast(err.response.data.message, { appearance: "error" });
+    });
+    mutate(`/api/content?topic=${topic}&type=${type}&filter=${filter}`);
+  };
+  // React.useEffect(() => {
+  //   if (data.fave) {
+  //     setFavourite(data.fave);
+  //   }
+  // }, [data]);
 
   return (
     <>
@@ -107,10 +144,7 @@ export default function ContentCard({ data }) {
                 title={data.title}
               />
             ) : (
-              <CardMedia
-                className={classes.media}
-                title="Contemplative Reptile"
-              >
+              <CardMedia className={classes.media}>
                 <div className={classes.logo}>
                   <Image
                     quality="100"
@@ -128,7 +162,7 @@ export default function ContentCard({ data }) {
 
         <CardContent>
           <div className={classes.title}>
-            <Typography gutterBottom variant="h5">
+            <Typography gutterBottom variant="h6">
               {data.title}
             </Typography>
           </div>
@@ -136,33 +170,33 @@ export default function ContentCard({ data }) {
         <CardActions>
           <IconButton
             size="small"
-            onClick={() => setComplete(!complete)}
+            onClick={handleComplete}
             color={complete ? "primary" : "default"}
           >
             <CheckCircleIcon />
           </IconButton>
           <IconButton
             size="small"
-            onClick={() => setFavourite(!favourite)}
+            onClick={handleFavourite}
             color={favourite ? "primary" : "default"}
           >
             <FavoriteIcon />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             size="small"
             onClick={() => setLater(!later)}
             color={later ? "primary" : "default"}
           >
             <WatchLaterIcon />
-          </IconButton>
+          </IconButton> */}
 
-          <IconButton
+          {/* <IconButton
             size="small"
             style={{ marginLeft: "auto" }}
             onClick={() => handleOpen(true)}
           >
             <NotesIcon />
-          </IconButton>
+          </IconButton> */}
         </CardActions>
       </Card>
 

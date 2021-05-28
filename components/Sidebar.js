@@ -29,6 +29,11 @@ import { useToasts } from "react-toast-notifications";
 import SessionExpiredCheck from "./SessionExpiredCheck";
 import Link from "next/link";
 import { MyContext } from "./context";
+import AddTopicDialog from "./AddTopicDialog";
+import useSWR from "swr";
+import fetcher from "../util/fetcher";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 const menu = [
   {
@@ -82,29 +87,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ topics }) {
+export default function Sidebar() {
   const classes = useStyles();
   const { darkMode, setDarkMode } = React.useContext(MyContext);
+  const { openAddTopic, setOpenAddTopic, topics, setTopics } = React.useContext(
+    MyContext
+  );
 
   const { addToast } = useToasts();
-
   const router = useRouter();
-  const { name } = router.query;
+  const name = router.query.name;
   const [open, setOpen] = React.useState(true);
   const [displayChildren, setDisplayChildren] = React.useState({});
   const [logout, setLogout] = React.useState(false);
-  // const openList = new Array(topics.length);
-  // for (var i = 0; i < openList.length; i++) {
-  //   openList[i] = false;
-  // }
-  // const [open, setOpen] = React.useState(openList);
+
   const [selected, setSelected] = React.useState(name);
+
+  const { data, error } = useSWR(`/api/get-topics`, fetcher);
+
+  React.useEffect(() => {
+    if (data) {
+      let simplifiedTopics = [];
+      data.forEach((item) => simplifiedTopics.push(item.title));
+      setTopics(simplifiedTopics);
+    }
+  }, [data]);
+  // console.log(topics);
 
   const handleClick = (index, mainItem) => {
     let newOpenList = open.slice();
     newOpenList[index] = !newOpenList[index];
     setOpen(newOpenList);
     navToTopic(mainItem.text);
+  };
+
+  const handleDialogOpen = () => {
+    setOpenAddTopic(true);
   };
 
   const navToTopic = (topic) => {
@@ -115,9 +133,12 @@ export default function Sidebar({ topics }) {
     return (
       <ul>
         {items.map((item) => (
-          <li>
+          <ListItem>
             <Link href={"/topic/" + item.title}>
-              <ListItemText primary={item.title} />
+              <ListItemText
+                primary={item.title}
+                style={{ cursor: "pointer" }}
+              />
             </Link>
             {item.children && (
               <button
@@ -135,18 +156,17 @@ export default function Sidebar({ topics }) {
             {displayChildren[item.title] && item.children && (
               <Menu items={item.children} />
             )}
-          </li>
+          </ListItem>
         ))}
       </ul>
     );
   }
-
   const handleLogout = () => {
     Axios.get("http://localhost:3000/api/logout")
       .then((response) => {
         // console.log(response);
         addToast(response.data.message, { appearance: "success" });
-        router.push("/login");
+        router.push("/");
         // addToast(err.response.data.message, { appearance: "error" });
       })
       .catch((err) => {
@@ -164,7 +184,7 @@ export default function Sidebar({ topics }) {
       anchor="left"
       classes={{ paper: classes.drawerPaper }}
     >
-      <div alignItems="center" className={classes.title}>
+      <div className={classes.title}>
         <RiBookmark3Fill
           color="#6267dc"
           size="2em"
@@ -172,7 +192,42 @@ export default function Sidebar({ topics }) {
         />
         <Typography variant="h6">Resonance</Typography>
       </div>
-      <Menu items={menu} />
+
+      {/* {data && <Menu items={data} />} */}
+
+      <List className={classes.list}>
+        {topics.map((item) => (
+          <Link href={`/topic/${item}`} key={item}>
+            <ListItem
+              button
+              selected={item == selected ? true : false}
+              key={item}
+              onClick={() => setSelected(item)}
+            >
+              <ListItemText primary={item} />
+            </ListItem>
+          </Link>
+        ))}
+        <ListItem
+          button
+          style={{ marginBottom: "2em" }}
+          onClick={handleDialogOpen}
+        >
+          {/* <Fab
+            size="medium"
+            color="secondary"
+            variant="extended"
+            className={classes.margin}
+            onClick={handleDialogOpen}
+            style={{ marginRight: "auto" }}
+          > */}
+          <AddIcon style={{ marginRight: "0.25em" }} />
+          <ListItemText primary="Add Topic" />
+
+          {/* </Fab> */}
+        </ListItem>
+      </List>
+
       {/* <List className={classes.list}>
         <ListItem alignItems="center" className={classes.title}>
           <RiBookmark3Fill
@@ -219,6 +274,8 @@ export default function Sidebar({ topics }) {
 
 
       </List> */}
+
+      <AddTopicDialog />
       <ListItem className={classes.bottomIcon}>
         <IconButton onClick={handleLogout}>
           <ExitToAppIcon style={{ fontSize: 30 }} />

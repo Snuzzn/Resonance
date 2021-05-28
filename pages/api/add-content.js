@@ -17,24 +17,16 @@ export default authenticated(async (req, res) => {
     }
     try {
       const { db } = await connectToDatabase();
-
-      await db.collection("content").update(
-        {
-          uid: decode(req.cookies.auth).uid,
-          topic: req.body.topic,
-          type: req.body.type,
-          link: req.body.link,
-        },
-        {
-          uid: decode(req.cookies.auth).uid,
-          topic: req.body.topic,
-          type: req.body.type,
-          link: req.body.link,
-          img: img,
-          title: title,
-        },
-        { upsert: true }
-      );
+      console.log(req.body.type);
+      await db.collection("content").insertOne({
+        uid: decode(req.cookies.auth).uid,
+        topic: req.body.topic,
+        type: req.body.type,
+        link: req.body.link,
+        img: img,
+        title: title,
+        consumed: false,
+      });
       res.status(200).json({ message: "successfully added content" });
     } catch {
       res.status(501).json({ message: "could not add content" });
@@ -73,7 +65,8 @@ const getTitle = async (link) => {
   var $ = cheerio.load(response.data);
   let title = $("title").text();
   // console.log(title);
-  title = title.replace(/^(.+)–\s.+$/, "$1");
+  // title = title.replace(/^(.+)–\s.+$/, "$1");
+  title = title.replace(/^- Youtube$/, "");
   console.log(title);
   return title;
 };

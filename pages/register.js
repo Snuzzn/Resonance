@@ -53,6 +53,22 @@ export default function SignIn() {
   const [name, setName] = React.useState("");
   const router = useRouter();
 
+  const handleRegister = () => {
+    Axios.post("http://localhost:3000/api/register", {
+      name: name,
+      email: email,
+      password: pass,
+    })
+      .then((response) => {
+        handleLogin();
+        // console.log(response);
+      })
+      .catch((err) => {
+        // console.log(err.response.data.message);
+        addToast(err.response.data.message, { appearance: "error" });
+      });
+  };
+
   const handleLogin = async () => {
     await Axios.post("http://localhost:3000/api/login", {
       email: email,
@@ -81,9 +97,21 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign Up
         </Typography>
         <form className={classes.form} noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="name"
+            label="Name"
+            type="string"
+            id="string"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -117,9 +145,9 @@ export default function SignIn() {
               label="Remember me"
             />
 
-            {/* <Link href="#" variant="body2" style={{ marginLeft: "auto" }}>
+            <Link href="#" variant="body2" style={{ marginLeft: "auto" }}>
               Forgot password?
-            </Link> */}
+            </Link>
           </div>
 
           <Button
@@ -127,20 +155,22 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin}
+            onClick={handleRegister}
           >
-            Login
+            Sign Up
           </Button>
-          <Link href="/register">
+
+          <Link href="/login">
             <Button
               fullWidth
               variant="outlined"
               color="primary"
               className={classes.submit}
             >
-              Register
+              Sign In
             </Button>
           </Link>
+          {/* <Divider style={{ marginTop: "2em" }} /> */}
         </form>
       </div>
     </Container>

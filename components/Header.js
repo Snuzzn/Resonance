@@ -8,7 +8,7 @@ import {
   Button,
   Popover,
 } from "@material-ui/core";
-import StatusButton from "./StatusButton";
+import FilterOptions from "./FilterOptions";
 import AddIcon from "@material-ui/icons/Add";
 import TocIcon from "@material-ui/icons/Toc";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -59,7 +59,7 @@ export default function Header({ grid, setGrid, currMedium, topics }) {
   return (
     <div className={classes.titleContainer}>
       <Typography variant="h4">{name}</Typography>
-      <StatusButton />
+      <FilterOptions />
       <IconButton
         size="small"
         onClick={() => setGrid(!grid)}
@@ -94,7 +94,7 @@ function SimplePopover() {
   // const [cardSize, setCardSize] = React.useState(345);
   const handleChange = (event, newValue) => {
     setCardSize(newValue);
-    console.log(cardSize);
+    // console.log(cardSize);
   };
 
   const handleClick = (event) => {

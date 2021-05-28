@@ -1,21 +1,31 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Chip } from "@material-ui/core";
-import { HiDotsCircleHorizontal } from "react-icons/hi";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import PhotoSizeSelectActualIcon from "@material-ui/icons/PhotoSizeSelectActual";
-import MusicNoteIcon from "@material-ui/icons/MusicNote";
+import { MyContext } from "./context";
+import useSWR from "swr";
+import fetcher from "../util/fetcher";
+import { useRouter } from "next/router";
+
 import { IoMusicalNotes } from "react-icons/io5";
 import { RiArticleFill } from "react-icons/ri";
-import { FaPodcast } from "react-icons/fa";
+import { HiDotsCircleHorizontal, HiPhotograph } from "react-icons/hi";
+import { MdMovie } from "react-icons/md";
+import { FaBook, FaPodcast, FaBloggerB } from "react-icons/fa";
+import { AiFillYoutube, AiFillShopping } from "react-icons/ai";
 
 const mediaIcons = {
   All: <HiDotsCircleHorizontal />,
-  Videos: <YouTubeIcon />,
+  Videos: <AiFillYoutube />,
   Articles: <RiArticleFill />,
   Photos: <PhotoSizeSelectActualIcon />,
   Sound: <IoMusicalNotes />,
   Podcasts: <FaPodcast />,
+  Shopping: <AiFillShopping />,
+  Books: <FaBook />,
+  Movies: <MdMovie />,
+  Blogs: <FaBloggerB />,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -32,22 +42,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MediaTypes({ currMedium, setCurrMedium, media }) {
   const classes = useStyles();
+
+  const { type, setType } = React.useContext(MyContext);
+  const router = useRouter();
+  const { data, error } = useSWR(
+    `/api/get-types?topic=${router.query.name}`,
+    fetcher
+  );
   const handleClick = (medium) => {
-    setCurrMedium(medium);
+    // console.log(medium + "dsfd");
+    setType(medium);
   };
+  // console.log(type);
 
   return (
     <div className={classes.mediaContainer}>
-      {media.map((medium) => (
-        <Chip
-          key={medium}
-          icon={mediaIcons[medium]}
-          size="small"
-          label={medium}
-          color={currMedium == medium ? "primary" : "default"}
-          onClick={() => handleClick(medium)}
-        />
-      ))}
+      {data &&
+        data.map((medium) => (
+          <Chip
+            key={medium}
+            icon={mediaIcons[medium]}
+            size="small"
+            label={medium}
+            color={type === medium ? "primary" : "default"}
+            onClick={() => handleClick(medium)}
+          />
+        ))}
     </div>
   );
 }

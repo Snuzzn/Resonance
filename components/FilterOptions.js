@@ -1,5 +1,6 @@
 import React from "react";
 import { FormControl, Select, MenuItem, makeStyles } from "@material-ui/core";
+import { MyContext } from "./context";
 
 const options = ["To consume", "Consumed", "Favourites"];
 
@@ -11,21 +12,22 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {},
 }));
 
-export default function StatusButton() {
+export default function FilterOptions() {
   const classes = useStyles();
-  const [status, setStatus] = React.useState("To consume");
+  const { filter, setFilter } = React.useContext(MyContext);
 
   const handleChange = (event) => {
-    setStatus(event.target.value);
+    setFilter(event.target.value);
   };
 
   return (
     <FormControl className={classes.formControl}>
       <Select
-        value={status}
+        value={filter}
         onChange={handleChange}
         className={classes.menuItem}
       >
+        <MenuItem value="Unfiltered">Unfiltered</MenuItem>
         <MenuItem value="To consume">To consume</MenuItem>
         <MenuItem value="Consumed">Consumed</MenuItem>
         <MenuItem value="Favourites">Favourites</MenuItem>

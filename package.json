@@ -35,6 +35,7 @@
     "react-icons": "^4.2.0",
     "react-toast-notifications": "^2.4.4",
     "react-transition-group": "^4.4.1",
+    "react-undraw-illustrations": "^2.0.3",
     "swr": "^0.5.6"
   }
 }

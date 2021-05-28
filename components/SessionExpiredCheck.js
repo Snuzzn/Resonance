@@ -47,7 +47,7 @@ export default function SessionExpiredCheck() {
     >
       <Fade in>
         <div className={classes.paper}>
-          <h2>Logging you out</h2>
+          <h2>Your session has expired.</h2>
 
           <div className={classes.redirect}>
             <p>Redirecting to login...</p>

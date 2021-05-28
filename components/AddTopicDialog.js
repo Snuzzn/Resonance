@@ -29,24 +29,21 @@ import { HiDotsCircleHorizontal, HiPhotograph } from "react-icons/hi";
 import { MdMovie } from "react-icons/md";
 import { FaBook, FaPodcast, FaBloggerB } from "react-icons/fa";
 import { AiFillYoutube, AiFillShopping } from "react-icons/ai";
-import { VscSymbolMisc } from "react-icons/vsc";
 
 const allMediaTypes = [
   [<RiArticleFill style={{ marginRight: "0.5em" }} />, "Articles"],
-  [<FaBloggerB style={{ marginRight: "0.5em" }} />, "Blogs"],
   [<FaBook style={{ marginRight: "0.5em" }} />, "Books"],
-  // [<VscSymbolMisc style={{ marginRight: "0.5em" }} />, "Miscellaneous"],
+  [<FaBloggerB style={{ marginRight: "0.5em" }} />, "Blogs"],
   [<MdMovie style={{ marginRight: "0.5em" }} />, "Movies"],
+  [<IoMusicalNotes style={{ marginRight: "0.5em" }} />, "Music"],
   [<HiPhotograph style={{ marginRight: "0.5em" }} />, "Photos"],
   [<FaPodcast style={{ marginRight: "0.5em" }} />, "Podcasts"],
   [<AiFillShopping style={{ marginRight: "0.5em" }} />, "Shopping"],
-  [<IoMusicalNotes style={{ marginRight: "0.5em" }} />, "Sound"],
   [<AiFillYoutube style={{ marginRight: "0.5em" }} />, "Videos"],
 ];
 const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 120,
-    marginBottom: 10,
     marginRight: 20,
   },
   selectEmpty: {
@@ -54,40 +51,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddContentDialog({ open, setOpen, currMedium }) {
+export default function AddTopicDialog({ open, setOpen, currMedium, topics }) {
   const router = useRouter();
   const classes = useStyles();
-  const [topic, setTopic] = React.useState(router.query.name);
-
-  React.useEffect(() => {
-    setTopic(router.query.name);
-    // setType(currMedium);
-  }, [router.query.name]);
-  const [link, setLink] = React.useState("");
+  const [topic, setTopic] = React.useState("");
 
   const { addToast } = useToasts();
+  const { openAddTopic, setOpenAddTopic } = React.useContext(MyContext);
 
   const handleClose = () => {
-    setOpen(false);
-    setLink("");
+    setOpenAddTopic(false);
+    setTopic("");
   };
-
-  const { type, topics, filter } = React.useContext(MyContext);
-  const [medium, setMedium] = React.useState(type);
-  React.useEffect(() => {
-    if (type === "All") {
-      setMedium("Articles");
-    } else {
-      setMedium(type);
-    }
-  }, [type]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await Axios.post("http://localhost:3000/api/add-content", {
+    await Axios.post("http://localhost:3000/api/add-topic", {
       topic: topic,
-      type: medium,
-      link: link,
     })
       .then((response) => {
         addToast(response.data.message, { appearance: "success" });
@@ -96,59 +76,27 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
       .catch((err) => {
         addToast(err.response.data.message, { appearance: "error" });
       });
-    mutate(
-      `/api/content?topic=${router.query.name}&type=${type}&filter=${filter}`
-    );
-    mutate(`/api/get-types?topic=${router.query.name}`);
+    // console.log(`/api/content?topic=${router.query.name}`);
+    mutate(`/api/get-topics`);
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add content</DialogTitle>
+    <Dialog open={openAddTopic} onClose={handleClose}>
+      <DialogTitle>Add topic</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <FormControl className={classes.formControl}>
-            <InputLabel shrink>Topic</InputLabel>
-            <Select
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Topic"
+              fullWidth
               value={topic}
-              onChange={(event) => setTopic(event.target.value)}
-              className={classes.selectEmpty}
-            >
-              {topics.map((title) => (
-                <MenuItem key={title} value={title}>
-                  {title}
-                </MenuItem>
-              ))}
-            </Select>
+              onChange={(e) => {
+                setTopic(e.target.value);
+              }}
+            />
           </FormControl>
-
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink>Medium</InputLabel>
-            <Select
-              value={medium}
-              onChange={(event) => setMedium(event.target.value)}
-              className={classes.selectEmpty}
-            >
-              {allMediaTypes.map((mediaType) => (
-                <MenuItem value={mediaType[1]} key={mediaType[1]}>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {mediaType}
-                  </div>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Link"
-            fullWidth
-            value={link}
-            onChange={(e) => {
-              setLink(e.target.value);
-            }}
-          />
 
           <DialogActions>
             <Button onClick={handleClose} color="primary">

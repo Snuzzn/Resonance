@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import { ThemeProvider } from "@material-ui/core";
-import theme from "../styles/theme";
 import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ToastProvider } from "react-toast-notifications";
@@ -39,6 +38,7 @@ const Themer = ({ children }) => {
             background: darkMode ? "#2a3456" : "#f2f4f6",
           },
           html: {
+            backgroundColor: darkMode ? "#37466F" : "#fff",
             scrollbarWidth: "thin",
             scrollbarColor: darkMode ? "#1A2640 #2a3456" : "#C8CBCF #f2f4f6",
           },
@@ -62,7 +62,7 @@ const Themer = ({ children }) => {
         main: darkMode ? "#7967ff" : "#556cd6",
       },
       secondary: {
-        main: "#19857b",
+        main: "#EC407A",
       },
 
       background: {
