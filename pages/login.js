@@ -20,6 +20,7 @@ import { FcGoogle } from "react-icons/fc";
 import useSWR from "swr";
 import fetcher from "../util/fetcher";
 import Axios from "axios";
+import baseUrl from "../util/baseUrl";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,7 +55,7 @@ export default function SignIn() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    await Axios.post("https://resonance-snuzzn.vercel.app/api/login", {
+    await Axios.post(`${baseUrl}/api/login`, {
       email: email,
       password: pass,
     })

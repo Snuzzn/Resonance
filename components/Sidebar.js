@@ -34,6 +34,7 @@ import useSWR from "swr";
 import fetcher from "../util/fetcher";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import baseUrl from "../util/baseUrl";
 
 const menu = [
   {
@@ -162,7 +163,7 @@ export default function Sidebar() {
     );
   }
   const handleLogout = () => {
-    Axios.get("http://localhost:3000/api/logout")
+    Axios.get(`${baseUrl}/api/logout`)
       .then((response) => {
         // console.log(response);
         addToast(response.data.message, { appearance: "success" });

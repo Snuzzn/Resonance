@@ -23,6 +23,7 @@ import Axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
+import baseUrl from "../util/baseUrl";
 
 const useStyles = makeStyles((theme, cardSize) => ({
   root: (props) => ({
@@ -107,7 +108,7 @@ export default function ContentCard({ data }) {
   const handleFavourite = async () => {
     setFavourite(!favourite);
 
-    await Axios.post("http://localhost:3000/api/favourite", {
+    await Axios.post(`${baseUrl}/api/favourite`, {
       _id: data._id,
     }).catch((err) => {
       // console.log(err);
@@ -118,7 +119,7 @@ export default function ContentCard({ data }) {
 
   const handleComplete = async () => {
     setComplete(!complete);
-    await Axios.post("http://localhost:3000/api/consume", {
+    await Axios.post(`${baseUrl}/api/consume`, {
       _id: data._id,
     }).catch((err) => {
       // console.log(err);

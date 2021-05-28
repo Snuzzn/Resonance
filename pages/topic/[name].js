@@ -13,13 +13,6 @@ export default function Topic() {
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
 
-  const topics = [
-    { text: "Productivity", path: "/", subItems: [] },
-    { text: "Art", path: "/", subItems: ["Landscape Painting", "Portraits"] },
-    { text: "Coding", path: "/", subItems: ["React", "Express"] },
-  ];
-
-  const media = ["All", "Videos", "Articles", "Podcasts"];
   const classes = useStyles();
 
   return (
@@ -31,18 +24,9 @@ export default function Topic() {
       </Head>
       <CssBaseline />
       <main>
-        <Layout topics={topics}>
-          <Header
-            grid={grid}
-            setGrid={setGrid}
-            currMedium={currMedium}
-            topics={topics}
-          />
-          <MediaTypes
-            currMedium={currMedium}
-            setCurrMedium={setCurrMedium}
-            media={media}
-          />
+        <Layout>
+          <Header grid={grid} setGrid={setGrid} currMedium={currMedium} />
+          <MediaTypes currMedium={currMedium} setCurrMedium={setCurrMedium} />
           <ContentView grid={grid} className={classes.content} />
         </Layout>
       </main>

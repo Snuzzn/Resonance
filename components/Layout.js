@@ -11,11 +11,11 @@ const useStyles = makeStyles((theme) => ({
   },
   root: { display: "flex" },
 }));
-export default function Layout({ children, topics }) {
+export default function Layout({ children }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Sidebar topics={topics} />
+      <Sidebar />
       <div className={classes.page}>{children}</div>
     </div>
   );

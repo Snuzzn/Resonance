@@ -45,7 +45,7 @@ export default function Home() {
       <CssBaseline />
 
       <main>
-        <Layout topics={topics}>
+        <Layout>
           {/* <div style={{ marginLeft: "auto", marginRight: "auto" }}>
             <UndrawFileSearching height="30em" />
           </div> */}

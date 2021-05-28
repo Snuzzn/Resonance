@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import fetcher from "../util/fetcher";
 import { MyContext } from "./context";
+import baseUrl from "../util/baseUrl";
 
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import PhotoSizeSelectActualIcon from "@material-ui/icons/PhotoSizeSelectActual";
@@ -66,7 +67,7 @@ export default function AddTopicDialog({ open, setOpen, currMedium, topics }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await Axios.post("http://localhost:3000/api/add-topic", {
+    await Axios.post(`${baseUrl}/api/add-topic`, {
       topic: topic,
     })
       .then((response) => {
