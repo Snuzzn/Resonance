@@ -54,7 +54,7 @@ export default function SignIn() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    await Axios.post("http://localhost:3000/api/login", {
+    await Axios.post("https://resonance-snuzzn.vercel.app/api/login", {
       email: email,
       password: pass,
     })
