@@ -24,10 +24,11 @@
     "cookie": "^0.4.1",
     "firebase": "^8.6.1",
     "firebase-admin": "^9.8.0",
+    "is-svg": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
+    "merge": "^2.1.1",
     "mongodb": "^3.6.6",
     "next": "10.2.0",
-    "next-auth": "^3.23.0",
     "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -36,6 +37,7 @@
     "react-toast-notifications": "^2.4.4",
     "react-transition-group": "^4.4.1",
     "react-undraw-illustrations": "^2.0.3",
+    "sockjs": "^0.3.21",
     "swr": "^0.5.6"
   }
 }
