@@ -25,12 +25,14 @@
     "firebase": "^8.6.1",
     "firebase-admin": "^9.8.0",
     "is-svg": "^4.3.1",
+    "js-yaml": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "merge": "^2.1.1",
     "mongodb": "^3.6.6",
     "next": "10.2.0",
     "nookies": "^2.5.2",
     "react": "17.0.2",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "17.0.2",
     "react-editor-js": "^1.9.0",
     "react-icons": "^4.2.0",
@@ -38,6 +40,7 @@
     "react-transition-group": "^4.4.1",
     "react-undraw-illustrations": "^2.0.3",
     "sockjs": "^0.3.21",
-    "swr": "^0.5.6"
+    "swr": "^0.5.6",
+    "webpack-dev-server": "^3.11.2"
   }
 }
