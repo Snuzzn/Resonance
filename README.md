@@ -1,6 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
+# Resonance
+### An elegant bookmark manager that helps keep track of content consumed on the web
+## Intro
 
 First, run the development server:
 
