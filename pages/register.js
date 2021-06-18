@@ -60,12 +60,12 @@ export default function SignIn() {
       email: email,
       password: pass,
     })
-      .then((response) => {
-        setTimeout(() => handleLogin(), 2500);
-      })
       .catch((err) => {
         // console.log(err.response.data.message);
         addToast(err.response.data.message, { appearance: "error" });
+      })
+      .then((response) => {
+        handleLogin();
       });
   };
 
