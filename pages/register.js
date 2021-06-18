@@ -61,7 +61,7 @@ export default function SignIn() {
       password: pass,
     })
       .then((response) => {
-        setTimeout(() => handleLogin(), 1500);
+        setTimeout(() => handleLogin(), 2500);
       })
       .catch((err) => {
         // console.log(err.response.data.message);
@@ -69,8 +69,8 @@ export default function SignIn() {
       });
   };
 
-  const handleLogin = () => {
-    Axios.post(`${baseUrl}/api/login`, {
+  const handleLogin = async () => {
+    await Axios.post(`${baseUrl}/api/login`, {
       email: email,
       password: pass,
     })
