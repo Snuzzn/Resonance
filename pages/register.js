@@ -54,15 +54,14 @@ export default function SignIn() {
   const [name, setName] = React.useState("");
   const router = useRouter();
 
-  const handleRegister = async () => {
-    await Axios.post(`${baseUrl}/api/register`, {
+  const handleRegister = () => {
+    Axios.post(`${baseUrl}/api/register`, {
       name: name,
       email: email,
       password: pass,
     })
       .then((response) => {
-        handleLogin();
-        // console.log(response);
+        setTimeout(() => handleLogin(), 1500);
       })
       .catch((err) => {
         // console.log(err.response.data.message);
@@ -70,8 +69,8 @@ export default function SignIn() {
       });
   };
 
-  const handleLogin = async () => {
-    await Axios.post(`${baseUrl}/api/login`, {
+  const handleLogin = () => {
+    Axios.post(`${baseUrl}/api/login`, {
       email: email,
       password: pass,
     })
