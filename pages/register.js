@@ -54,8 +54,8 @@ export default function SignIn() {
   const [name, setName] = React.useState("");
   const router = useRouter();
 
-  const handleRegister = () => {
-    Axios.post(`${baseUrl}/api/register`, {
+  const handleRegister = async () => {
+    await Axios.post(`${baseUrl}/api/register`, {
       name: name,
       email: email,
       password: pass,
