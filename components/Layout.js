@@ -3,10 +3,11 @@ import Sidebar from "./Sidebar";
 import React from "react";
 import useMediaQuery from "../util/useMediaQuery";
 import MenuIcon from "@material-ui/icons/Menu";
-
+import { Button } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   page: {
     padding: theme.spacing(3),
+    // background: "#2A3957",
     width: "100%",
     height: "100vh",
   },
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Layout({ children }) {
   const classes = useStyles();
   const [isMenuVisible, setIsMenuVisible] = React.useState(false);
+  console.log(isMenuVisible);
   const isMobile = useMediaQuery("(max-width: 800px)");
   return (
     <div className={classes.root}>

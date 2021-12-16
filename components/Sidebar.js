@@ -2,12 +2,22 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
+  AppBar,
+  Toolbar,
   Drawer,
+  Divider,
   List,
   ListItem,
+  ListSubheader,
   ListItemText,
+  Collapse,
+  Paper,
   IconButton,
 } from "@material-ui/core";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import OfflineBoltIcon from "@material-ui/icons/OfflineBolt";
+import { Palette } from "@material-ui/icons";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -52,6 +62,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
+    // borderRight: theme.palette.type == "light" ? "1px solid #D6D6D6" : "0px",
   },
   drawerPaper: {
     width: drawerWidth,
@@ -84,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     display: "flex",
     flexDirection: "column",
+    // color: "white",
   },
 }));
 
@@ -114,6 +126,7 @@ export default function Sidebar({ isMenuVisible, setIsMenuVisible }) {
       setTopics(simplifiedTopics);
     }
   }, [data]);
+  // console.log(topics);
 
   const handleClick = (index, mainItem) => {
     let newOpenList = open.slice();
@@ -134,11 +147,14 @@ export default function Sidebar({ isMenuVisible, setIsMenuVisible }) {
   const handleLogout = () => {
     Axios.get(`${baseUrl()}/api/logout`)
       .then((response) => {
+        // console.log(response);
         addToast(response.data.message, { appearance: "success" });
         router.push("/");
+        // addToast(err.response.data.message, { appearance: "error" });
       })
       .catch((err) => {
         console.log(err.response.data.message);
+        // addToast(err.response.data.message, { appearance: "error" });
       });
     setLogout(true);
   };

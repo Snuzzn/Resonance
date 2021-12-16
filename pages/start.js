@@ -1,11 +1,14 @@
 import Head from "next/head";
 import React from "react";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline, Typography, Grid, Chip } from "@material-ui/core";
 import Layout from "../components/Layout";
+import ContentView from "../components/ContentView";
+import Header from "../components/Header";
+import MediaTypes from "../components/MediaTypes";
 import Link from "next/link";
 import useSWR from "swr";
 import fetcher from "../util/fetcher";
-
+import { UndrawFileSearching } from "react-undraw-illustrations";
 function useHello() {
   const { data, error } = useSWR(`/api/hello`, fetcher);
 
@@ -25,8 +28,12 @@ export default function Home() {
   ];
   const media = ["All", "Videos", "Articles", "Podcasts"];
 
-  // const { data, isLoading, isError } = useHello();
+  const { data, isLoading, isError } = useHello();
+  // console.log(data);
 
+  // if (isLoading) return <>Loading</>;
+  // if (isError) return <>Error</>;
+  // return <> {data.message} </>;
   return (
     <>
       <Head>
@@ -38,7 +45,11 @@ export default function Home() {
       <CssBaseline />
 
       <main>
-        <Layout></Layout>
+        <Layout>
+          {/* <div style={{ marginLeft: "auto", marginRight: "auto" }}>
+            <UndrawFileSearching height="30em" />
+          </div> */}
+        </Layout>
       </main>
     </>
   );
