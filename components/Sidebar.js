@@ -147,7 +147,7 @@ export default function Sidebar({ isMenuVisible, setIsMenuVisible }) {
   const handleLogout = () => {
     Axios.get(`${baseUrl()}/api/logout`)
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         addToast(response.data.message, { appearance: "success" });
         router.push("/");
         // addToast(err.response.data.message, { appearance: "error" });
