@@ -6,8 +6,8 @@ export default (req, res) => {
   res.setHeader(
     "Set-Cookie",
     cookie.serialize("auth", "invalid", {
-      // httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true,
+      secure: false,
       sameSite: "strict",
       maxAge: 3600,
       path: "/",
