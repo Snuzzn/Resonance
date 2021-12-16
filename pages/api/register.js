@@ -15,7 +15,7 @@ export default async (req, res) => {
     if (existingUser) {
       res.status(400).json({ message: "User already exists" });
     } else {
-      hash(req.body.password, 10, async function (err, hash) {
+      hash(req.body.password, 10, async function(err, hash) {
         await db.collection("users").insertOne({
           email: req.body.email,
           name: req.body.name,
