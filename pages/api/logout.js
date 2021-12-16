@@ -13,16 +13,6 @@ export default (req, res) => {
       path: "/",
     })
   );
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("authhh", "invalid", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 3600,
-      path: "/",
-    })
-  );
 
   res.status(200).json({ message: "Logged out" });
 };
