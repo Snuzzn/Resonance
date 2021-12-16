@@ -25,7 +25,7 @@ export default async (req, res) => {
             "Set-Cookie",
             cookie.serialize("auth", jwt, {
               httpOnly: true,
-              secure: false,
+              secure: process.env.NODE_ENV !== "development",
               sameSite: "strict",
               maxAge: 3600,
               path: "/",
