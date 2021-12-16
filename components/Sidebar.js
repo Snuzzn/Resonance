@@ -145,7 +145,7 @@ export default function Sidebar({ isMenuVisible, setIsMenuVisible }) {
   };
 
   const handleLogout = () => {
-    Axios.get(`${baseUrl()}/api/logout`)
+    Axios.post(`${baseUrl()}/api/logout`, {})
       .then((response) => {
         console.log(response);
         addToast(response.data.message, { appearance: "success" });
