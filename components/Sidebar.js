@@ -34,7 +34,9 @@ import useSWR from "swr";
 import fetcher from "../util/fetcher";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 import baseUrl from "../util/baseUrl";
+import useMediaQuery from "../util/useMediaQuery";
 
 const menu = [
   {
@@ -77,6 +79,15 @@ const useStyles = makeStyles((theme) => ({
     margin: "1em 0 1em",
   },
 
+  titleContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    [theme.breakpoints.down(800)]: {
+      justifyContent: "space-between",
+      paddingLeft: "15px",
+    },
+  },
   bottomIcon: {
     marginTop: "auto",
     justifyContent: "center",
@@ -88,12 +99,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar() {
+export default function Sidebar({ isMenuVisible, setIsMenuVisible }) {
   const classes = useStyles();
   const { darkMode, setDarkMode } = React.useContext(MyContext);
   const { openAddTopic, setOpenAddTopic, topics, setTopics } = React.useContext(
     MyContext
   );
+
+  const isMobile = useMediaQuery("(max-width: 800px)");
 
   const { addToast } = useToasts();
   const router = useRouter();
@@ -146,39 +159,6 @@ export default function Sidebar() {
     setLogout(true);
   };
 
-  function Menu({ items }) {
-    return (
-      <ul>
-        {items.map((item) => (
-          <ListItem>
-            <Link href={"/topic/" + item.title}>
-              <ListItemText
-                primary={item.title}
-                style={{ cursor: "pointer" }}
-              />
-            </Link>
-            {item.children && (
-              <button
-                onClick={() => {
-                  setDisplayChildren({
-                    ...displayChildren,
-                    [item.title]: !displayChildren[item.title],
-                  });
-                  setOpen(false);
-                }}
-              >
-                {displayChildren[item.title] ? "-" : "+"}
-              </button>
-            )}
-            {displayChildren[item.title] && item.children && (
-              <Menu items={item.children} />
-            )}
-          </ListItem>
-        ))}
-      </ul>
-    );
-  }
-
   return (
     <Drawer
       component="nav"
@@ -186,17 +166,29 @@ export default function Sidebar() {
       variant="permanent"
       anchor="left"
       classes={{ paper: classes.drawerPaper }}
+      style={
+        isMobile
+          ? !isMenuVisible
+            ? { display: "none" }
+            : { position: "absolute" }
+          : {}
+      }
     >
-      <div className={classes.title}>
-        <RiBookmark3Fill
-          color="#6267dc"
-          size="2em"
-          style={{ marginRight: "0.5em" }}
-        />
-        <Typography variant="h6">Resonance</Typography>
+      <div className={classes.titleContainer}>
+        <div className={classes.title}>
+          <RiBookmark3Fill
+            color="#6267dc"
+            size="2em"
+            style={{ marginRight: "0.5em" }}
+          />
+          <Typography variant="h6">Resonance</Typography>
+        </div>
+        {isMobile && isMenuVisible && (
+          <IconButton>
+            <CloseIcon onClick={() => setIsMenuVisible(!isMenuVisible)} />
+          </IconButton>
+        )}
       </div>
-
-      {/* {data && <Menu items={data} />} */}
 
       <List className={classes.list}>
         {topics.map((item) => (
@@ -216,67 +208,10 @@ export default function Sidebar() {
           style={{ marginBottom: "2em" }}
           onClick={handleDialogOpen}
         >
-          {/* <Fab
-            size="medium"
-            color="secondary"
-            variant="extended"
-            className={classes.margin}
-            onClick={handleDialogOpen}
-            style={{ marginRight: "auto" }}
-          > */}
           <AddIcon style={{ marginRight: "0.25em" }} />
           <ListItemText primary="Add Topic" />
-
-          {/* </Fab> */}
         </ListItem>
       </List>
-
-      {/* <List className={classes.list}>
-        <ListItem alignItems="center" className={classes.title}>
-          <RiBookmark3Fill
-            color="#6267dc"
-            size="2em"
-            style={{ marginRight: "0.5em" }}
-          />
-          <Typography variant="h6">Resonance</Typography>
-        </ListItem>
-        {topics.map((mainItem, index) => (
-          <div key={index}>
-            <ListItem
-              selected={selected === mainItem.text}
-              button
-              onClick={() => handleClick(index, mainItem)}
-            >
-              <ListItemText primary={mainItem.text} />
-              {mainItem.subItems.length > 0 && (
-                <>{open[index] ? <ExpandLess /> : <ExpandMore />}</>
-              )}
-            </ListItem>
-
-            {mainItem.subItems.length > 0 && (
-              <>
-                <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                  <List disablePadding>
-                    {mainItem.subItems.map((subItem) => (
-                      <ListItem
-                        selected={selected === subItem}
-                        key={subItem}
-                        button
-                        className={classes.nested}
-                        onClick={() => navToTopic(subItem)}
-                      >
-                        <ListItemText primary={subItem} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
-              </>
-            )}
-          </div>
-        ))}
-
-
-      </List> */}
 
       <AddTopicDialog />
       <ListItem className={classes.bottomIcon}>
