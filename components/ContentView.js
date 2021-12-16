@@ -12,13 +12,10 @@ import SessionExpiredCheck from "./SessionExpiredCheck";
 import { MyContext } from "./context";
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { UndrawNoData } from "react-undraw-illustrations";
+import Image from "next/image";
+import { useTheme } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
-  // centered: {
-  //   alignSelf: "center",
-  //   justifySelf: "center",
-  // },
-
   noData: {
     primaryColor: "blue",
   },
@@ -35,19 +32,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "auto",
   },
 }));
-const images = [
-  "https://i3.ytimg.com/vi/xWMMo1v594Y/maxresdefault.jpg",
-  "https://logo.clearbit.com/medium.com",
-  "https://i3.ytimg.com/vi/XHprIlkY8Q4/maxresdefault.jpg",
-  "https://logo.clearbit.com/reddit.com",
-  "https://i3.ytimg.com/vi/4MlWZDx7Zzw/maxresdefault.jpg",
-  "https://logo.clearbit.com/notion.com",
-  "https://i3.ytimg.com/vi/upxBGNcryRs/maxresdefault.jpg",
-  "https://logo.clearbit.com/cgi.cse.unsw.edu.au",
-  "https://i3.ytimg.com/vi/_e6wTOuJ20M/maxresdefault.jpg",
-  "https://i3.ytimg.com/vi/47evGD6A4Fs/maxresdefault.jpg",
-  "https://logo.clearbit.com/spotify.com",
-];
+
 export default function ContentView({ grid }) {
   const router = useRouter();
   const topic = router.query.name;
@@ -65,7 +50,8 @@ export default function ContentView({ grid }) {
     }
   }, [error]);
   // console.log(filter);
-
+  const theme = useTheme().palette.type;
+  console.log(theme);
   return (
     <div className={classes.centered}>
       {grid ? (
@@ -74,7 +60,13 @@ export default function ContentView({ grid }) {
             <>
               {data.length == 0 ? (
                 <div className={classes.imageBox}>
-                  <UndrawNoData height="30em" />
+                  <Image
+                    src={`/images/empty_${
+                      theme === "dark" ? "dark" : "light"
+                    }.svg`}
+                    width={350}
+                    height={350}
+                  />
                 </div>
               ) : (
                 <>

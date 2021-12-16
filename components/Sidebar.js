@@ -132,7 +132,7 @@ export default function Sidebar() {
   };
 
   const handleLogout = () => {
-    Axios.get(`${baseUrl}/api/logout`)
+    Axios.get(`${baseUrl()}/api/logout`)
       .then((response) => {
         // console.log(response);
         addToast(response.data.message, { appearance: "success" });

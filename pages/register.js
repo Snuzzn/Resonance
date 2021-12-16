@@ -55,7 +55,7 @@ export default function SignIn() {
   const router = useRouter();
 
   const handleRegister = () => {
-    Axios.post(`${baseUrl}/api/register`, {
+    Axios.post(`${baseUrl()}/api/register`, {
       name: name,
       email: email,
       password: pass,
@@ -70,7 +70,7 @@ export default function SignIn() {
   };
 
   const handleLogin = async () => {
-    await Axios.post(`${baseUrl}/api/login`, {
+    await Axios.post(`${baseUrl()}/api/login`, {
       email: email,
       password: pass,
     })

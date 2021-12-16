@@ -60,12 +60,12 @@ export default function SignIn() {
   const [name, setName] = React.useState("");
   const router = useRouter();
   const { data } = useHello();
-
   if (data) {
     data.message === "Logged in" && router.push("/start");
   }
+
   const handleLogin = async () => {
-    await Axios.post(`${baseUrl}/api/login`, {
+    await Axios.post(`${baseUrl()}/api/login`, {
       email: email,
       password: pass,
     })
@@ -75,6 +75,7 @@ export default function SignIn() {
       })
       .catch((err) => {
         addToast(err.response.data.message, { appearance: "error" });
+        console.log(err);
         // console.log(err.response);
       });
   };

@@ -67,7 +67,7 @@ export default function AddTopicDialog({ open, setOpen, currMedium, topics }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await Axios.post(`${baseUrl}/api/add-topic`, {
+    await Axios.post(`${baseUrl()}/api/add-topic`, {
       topic: topic,
     })
       .then((response) => {

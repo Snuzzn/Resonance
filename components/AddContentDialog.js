@@ -88,7 +88,7 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    await Axios.post(`${baseUrl}/api/add-content`, {
+    await Axios.post(`${baseUrl()}/api/add-content`, {
       topic: topic,
       type: medium,
       link: link,

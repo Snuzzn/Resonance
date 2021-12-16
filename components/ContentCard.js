@@ -108,7 +108,7 @@ export default function ContentCard({ data }) {
   const handleFavourite = async () => {
     setFavourite(!favourite);
 
-    await Axios.post(`${baseUrl}/api/favourite`, {
+    await Axios.post(`${baseUrl()}/api/favourite`, {
       _id: data._id,
     }).catch((err) => {
       // console.log(err);
@@ -119,7 +119,7 @@ export default function ContentCard({ data }) {
 
   const handleComplete = async () => {
     setComplete(!complete);
-    await Axios.post(`${baseUrl}/api/consume`, {
+    await Axios.post(`${baseUrl()}/api/consume`, {
       _id: data._id,
     }).catch((err) => {
       // console.log(err);
