@@ -49,9 +49,7 @@ export default function ContentView({ grid }) {
       router.push("/login");
     }
   }, [error]);
-  // console.log(filter);
   const theme = useTheme().palette.type;
-  console.log(theme);
   return (
     <div className={classes.centered}>
       {grid ? (

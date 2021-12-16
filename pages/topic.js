@@ -1,10 +1,7 @@
 import Head from "next/head";
 import React from "react";
-import { CssBaseline, Typography, Grid, Chip } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import Layout from "../components/Layout";
-import ContentView from "../components/ContentView";
-import Header from "../components/Header";
-import MediaTypes from "../components/MediaTypes";
 
 import { useRouter } from "next/router";
 
@@ -14,11 +11,7 @@ export default function Topic() {
   const [grid, setGrid] = React.useState(true);
   const [currMedium, setCurrMedium] = React.useState("All");
 
-  const topics = [
-    { text: "Productivity", subItems: [] },
-    { text: "Art", subItems: ["Landscape", "Portraits"] },
-    { text: "Coding", subItems: ["React", "Express"] },
-  ];
+  const topics = [];
   const media = ["All", "Videos", "Articles", "Podcasts"];
 
   return (

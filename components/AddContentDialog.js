@@ -119,8 +119,8 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
               onChange={(event) => setTopic(event.target.value)}
               className={classes.selectEmpty}
             >
-              {topics.map((title) => (
-                <MenuItem key={title} value={title}>
+              {topics.map((title, index) => (
+                <MenuItem key={index} value={title}>
                   {title}
                 </MenuItem>
               ))}
@@ -134,8 +134,8 @@ export default function AddContentDialog({ open, setOpen, currMedium }) {
               onChange={(event) => setMedium(event.target.value)}
               className={classes.selectEmpty}
             >
-              {allMediaTypes.map((mediaType) => (
-                <MenuItem value={mediaType[1]} key={mediaType[1]}>
+              {allMediaTypes.map((mediaType, index) => (
+                <MenuItem value={mediaType[1]} key={index}>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     {mediaType}
                   </div>
