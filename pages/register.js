@@ -236,21 +236,32 @@ export default function SignIn() {
               loop={true}
             />
           </div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setTimeout(handleLogin, 1000);
-            }}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.6em" }}
           >
-            {isLoading ? (
-              <div className={classes.loadingContainer}>
-                <CircularProgress color="white" size="1em" /> Getting ready...
-              </div>
-            ) : (
-              <>Get started</>
-            )}
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setTimeout(handleLogin, 1000);
+              }}
+            >
+              {isLoading ? (
+                <div className={classes.loadingContainer}>
+                  <CircularProgress color="white" size="1em" /> Getting ready...
+                </div>
+              ) : (
+                <>Get started</>
+              )}
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setOpen(false)}
+            >
+              Go back
+            </Button>
+          </div>
         </Box>
       </Modal>
     </Container>
