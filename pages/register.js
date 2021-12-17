@@ -78,7 +78,8 @@ export default function SignIn() {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     Axios.post(`${baseUrl()}/api/register`, {
       name: name,
@@ -130,12 +131,13 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleRegister} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
+            autoFocus
             name="name"
             label="Name"
             type="string"
@@ -152,7 +154,6 @@ export default function SignIn() {
             type="email"
             name="email"
             autoComplete="email"
-            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -186,7 +187,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleRegister}
+            type="submit"
           >
             {isLoading ? (
               <div className={classes.loadingContainer}>
@@ -232,8 +233,8 @@ export default function SignIn() {
               height="100%"
               url="https://sanojan99.wistia.com/medias/rhnyvk1olq"
               style={{ position: "absolute", top: 0, left: 0 }}
-              fallback="../public/tripCollabSS.png"
-              loop={true}
+              fallback="../../public/images/favicon.svg"
+              playing={true}
             />
           </div>
           <div

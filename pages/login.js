@@ -71,7 +71,8 @@ export default function SignIn() {
     }
   }, []);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     await Axios.post(`${baseUrl()}/api/login`, {
       email: email,
@@ -104,7 +105,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -148,7 +149,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin}
+            type="submit"
           >
             {isLoading ? (
               <div className={classes.loadingContainer}>
