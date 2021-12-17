@@ -52,7 +52,7 @@ export default function Home() {
       <Head>
         <title>Resonance</title>
         <meta name="description" content="Bookmark manager" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.ico" />
       </Head>
       <CssBaseline />
 
