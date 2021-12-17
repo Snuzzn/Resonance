@@ -9,6 +9,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Modal from "@material-ui/core/Modal";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +23,7 @@ import fetcher from "../util/fetcher";
 import Axios from "axios";
 import baseUrl from "../util/baseUrl";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ReactPlayer from "react-player";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,6 +53,20 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     gap: "0.8em",
   },
+  modal: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 800,
+    backgroundColor: "#121426",
+    boxShadow: 24,
+    padding: 40,
+    borderRadius: 30,
+    display: "flex",
+    flexDirection: "column",
+    gap: "2em",
+  },
 }));
 
 export default function SignIn() {
@@ -74,23 +90,25 @@ export default function SignIn() {
         addToast(err.response.data.message, { appearance: "error" });
       })
       .then((response) => {
-        setTimeout(handleLogin, 3000);
+        setIsLoading(false);
+        setOpen(true);
+        // handleLogin()
       });
   };
 
   const handleLogin = () => {
+    setIsLoading(true);
     Axios.post(`${baseUrl()}/api/login`, {
       email: email,
       password: pass,
     })
       .then((response) => {
         addToast(response.data.message, { appearance: "success" });
-        router.push("/start");
         setIsLoading(false);
+        router.push("/start");
       })
       .catch((err) => {
         addToast(err.response.data.message, { appearance: "error" });
-        setIsLoading(false);
         // console.log(err.response);
       });
   };
@@ -98,7 +116,8 @@ export default function SignIn() {
   const errorToast = (err) => {
     addToast(err.response.data.message, { appearance: "error" });
   };
-  // const { data } = useSWR("/api/login", fetcher);
+
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Container maxWidth="xs">
@@ -190,6 +209,43 @@ export default function SignIn() {
           {/* <Divider style={{ marginTop: "2em" }} /> */}
         </form>
       </div>
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className={classes.modal}>
+          <div>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Welcome to Resonance!
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Here's a quick demo to show you what you can do.
+            </Typography>
+          </div>
+
+          <div style={{ position: "relative", paddingTop: "56.25%" }}>
+            <ReactPlayer
+              controls={true}
+              width="100%"
+              height="100%"
+              url="https://sanojan99.wistia.com/medias/rhnyvk1olq"
+              style={{ position: "absolute", top: 0, left: 0 }}
+              fallback="../public/tripCollabSS.png"
+              loop={true}
+            />
+          </div>
+          <Button variant="contained" color="primary" onClick={handleLogin}>
+            {isLoading ? (
+              <div className={classes.loadingContainer}>
+                <CircularProgress color="white" size="1em" /> Getting ready...
+              </div>
+            ) : (
+              <>Get started</>
+            )}
+          </Button>
+        </Box>
+      </Modal>
     </Container>
   );
 }
