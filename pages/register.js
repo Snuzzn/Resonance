@@ -104,11 +104,12 @@ export default function SignIn() {
     })
       .then((response) => {
         addToast(response.data.message, { appearance: "success" });
-        setIsLoading(false);
         router.push("/start");
+        setIsLoading(false);
       })
       .catch((err) => {
-        addToast(err.response.data.message, { appearance: "error" });
+        addToast("Try again", { appearance: "error" });
+        setIsLoading(false);
         // console.log(err.response);
       });
   };
@@ -235,7 +236,13 @@ export default function SignIn() {
               loop={true}
             />
           </div>
-          <Button variant="contained" color="primary" onClick={handleLogin}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setTimeout(handleLogin, 1000);
+            }}
+          >
             {isLoading ? (
               <div className={classes.loadingContainer}>
                 <CircularProgress color="white" size="1em" /> Getting ready...
