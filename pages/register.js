@@ -74,11 +74,11 @@ export default function SignIn() {
         addToast(err.response.data.message, { appearance: "error" });
       })
       .then((response) => {
-        setTimeout(handleLogin, 2000);
+        setTimeout(handleLogin, 3000);
       });
   };
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     Axios.post(`${baseUrl()}/api/login`, {
       email: email,
       password: pass,
