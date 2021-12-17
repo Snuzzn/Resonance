@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { useToasts } from "react-toast-notifications";
 import { useRouter } from "next/router";
 import Divider from "@material-ui/core/Divider";
@@ -44,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  loadingContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "0.8em",
+  },
 }));
 
 export default function SignIn() {
@@ -51,8 +58,8 @@ export default function SignIn() {
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
-  const [name, setName] = React.useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(async () => {
     try {
@@ -65,6 +72,7 @@ export default function SignIn() {
   }, []);
 
   const handleLogin = async () => {
+    setIsLoading(true);
     await Axios.post(`${baseUrl()}/api/login`, {
       email: email,
       password: pass,
@@ -78,6 +86,7 @@ export default function SignIn() {
         console.log(err);
         // console.log(err.response);
       });
+    setIsLoading(false);
   };
 
   const errorToast = (err) => {
@@ -141,7 +150,13 @@ export default function SignIn() {
             className={classes.submit}
             onClick={handleLogin}
           >
-            Login
+            {isLoading ? (
+              <div className={classes.loadingContainer}>
+                <CircularProgress color="white" size="1em" /> Logging in
+              </div>
+            ) : (
+              <>Login</>
+            )}
           </Button>
           <Link href="/register">
             <Button

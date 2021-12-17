@@ -21,6 +21,7 @@ import useSWR from "swr";
 import fetcher from "../util/fetcher";
 import Axios from "axios";
 import baseUrl from "../util/baseUrl";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  loadingContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "0.8em",
+  },
 }));
 
 export default function SignIn() {
@@ -53,8 +60,10 @@ export default function SignIn() {
   const [pass, setPass] = React.useState("");
   const [name, setName] = React.useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleRegister = async () => {
+    setIsLoading(true);
     Axios.post(`${baseUrl()}/api/register`, {
       name: name,
       email: email,
@@ -77,9 +86,11 @@ export default function SignIn() {
       .then((response) => {
         addToast(response.data.message, { appearance: "success" });
         router.push("/start");
+        setIsLoading(false);
       })
       .catch((err) => {
         addToast(err.response.data.message, { appearance: "error" });
+        setIsLoading(false);
         // console.log(err.response);
       });
   };
@@ -157,7 +168,13 @@ export default function SignIn() {
             className={classes.submit}
             onClick={handleRegister}
           >
-            Sign Up
+            {isLoading ? (
+              <div className={classes.loadingContainer}>
+                <CircularProgress color="white" size="1em" /> Signing up
+              </div>
+            ) : (
+              <>Sign up</>
+            )}
           </Button>
 
           <Link href="/login">
