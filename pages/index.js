@@ -7,6 +7,7 @@ import fetcher from "../util/fetcher";
 import { UndrawFileSearching } from "react-undraw-illustrations";
 import { RiBookmark3Fill } from "react-icons/ri";
 import { useRouter } from "next/router";
+import useMediaQuery from "../util/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
   centre: {
@@ -26,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(2),
     border: theme.palette.primary.main,
     boxShadow: `0.05em 0.05em 0.5em ${theme.palette.primary.main}`,
+    [theme.breakpoints.down(800)]: {
+      padding: theme.spacing(1),
+      paddingRight: theme.spacing(2),
+      borderRadius: theme.spacing(1),
+      height: "250px",
+    },
   },
 
   buttons: {
@@ -37,6 +44,25 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     marginRight: theme.spacing(3),
+    [theme.breakpoints.down(800)]: {
+      width: "100px",
+    },
+  },
+  title: {
+    fontSize: "6rem",
+    fontWeight: "300",
+    lineHeight: "0",
+    [theme.breakpoints.down(800)]: {
+      fontSize: "3rem",
+      fontWeight: "300",
+    },
+  },
+  subtitle: {
+    fontSize: "1.5rem",
+    fontWeight: "300",
+    [theme.breakpoints.down(800)]: {
+      fontSize: "1rem",
+    },
   },
 }));
 
@@ -64,8 +90,8 @@ export default function Home() {
             className={classes.logo}
           />
           <div className={classes.heroText}>
-            <Typography variant="h1">Resonance</Typography>
-            <Typography variant="h5">An elegant bookmark manager.</Typography>
+            <h1 className={classes.title}>Resonance</h1>
+            <h2 className={classes.subtitle}>An elegant bookmark manager.</h2>
             <div className={classes.buttons}>
               <Link href="/login">
                 <Button variant="contained" color="primary">
